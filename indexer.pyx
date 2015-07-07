@@ -24,6 +24,9 @@ class Indexer(object):
         self.source_file_name = source_file_name
         self.index_file_name = index_file_name
 
+    def make_index(self):
+        make_index_from_file(self.source_file_name, self.index_file_name, 0)
+
     def __enter__(self):
         self.if_object = IndexedFile(self.source_file_name, self.index_file_name)
         return self.if_object
