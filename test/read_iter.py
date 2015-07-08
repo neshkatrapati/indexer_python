@@ -8,4 +8,8 @@ line_number = int(sys.argv[3])
 idxr = Indexer(source_file, index_file)
 
 with idxr as i:
-  print i.read(line_number)
+    for index, line in enumerate(i):
+        if index < line_number:
+            print index, line
+        else:
+            break

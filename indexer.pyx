@@ -7,9 +7,23 @@ cdef class IndexedFile(object):
     """A file which reads the source_file"""
     cdef FILE* source_file
     cdef FILE* index_file
+    cdef int counter
     def __init__(self, source_file_name, index_file_name):
         self.source_file = fopen(source_file_name, "r")
         self.index_file = fopen(index_file_name, "r")
+        self.counter = 0;
+
+    def __iter__(self):
+      return  self
+
+    def __next__(self):
+      r = read_from_index(self.source_file, self.index_file, self.counter)
+      if r :
+        self.counter += 1
+        return r
+        
+      else:
+        return StopIteration
 
     def read(self, line_number):
         return read_from_index(self.source_file, self.index_file, line_number)

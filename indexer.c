@@ -460,6 +460,7 @@ struct __pyx_obj_7indexer_IndexedFile {
   PyObject_HEAD
   FILE *source_file;
   FILE *index_file;
+  int counter;
 };
 
 
@@ -690,9 +691,12 @@ int __pyx_module_is_main_indexer = 0;
 
 /* Implementation of 'indexer' */
 static PyObject *__pyx_builtin_object;
+static PyObject *__pyx_builtin_StopIteration;
 static int __pyx_pf_7indexer_11IndexedFile___init__(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self, PyObject *__pyx_v_source_file_name, PyObject *__pyx_v_index_file_name); /* proto */
-static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self, PyObject *__pyx_v_line_number); /* proto */
-static PyObject *__pyx_pf_7indexer_11IndexedFile_4close(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7indexer_11IndexedFile_2__iter__(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7indexer_11IndexedFile_4__next__(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7indexer_11IndexedFile_6read(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self, PyObject *__pyx_v_line_number); /* proto */
+static PyObject *__pyx_pf_7indexer_11IndexedFile_8close(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7indexer_7Indexer___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_source_file_name, PyObject *__pyx_v_index_file_name); /* proto */
 static PyObject *__pyx_pf_7indexer_7Indexer_2make_index(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7indexer_7Indexer_4__enter__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
@@ -719,6 +723,7 @@ static char __pyx_k_if_object[] = "if_object";
 static char __pyx_k_metaclass[] = "__metaclass__";
 static char __pyx_k_traceback[] = "traceback";
 static char __pyx_k_make_index[] = "make_index";
+static char __pyx_k_StopIteration[] = "StopIteration";
 static char __pyx_k_Indexer___exit[] = "Indexer.__exit__";
 static char __pyx_k_Indexer___init[] = "Indexer.__init__";
 static char __pyx_k_Indexer___enter[] = "Indexer.__enter__";
@@ -733,6 +738,7 @@ static PyObject *__pyx_n_s_Indexer___exit;
 static PyObject *__pyx_n_s_Indexer___init;
 static PyObject *__pyx_n_s_Indexer_make_index;
 static PyObject *__pyx_kp_s_Loads_up_indexer;
+static PyObject *__pyx_n_s_StopIteration;
 static PyObject *__pyx_n_s_close;
 static PyObject *__pyx_n_s_doc;
 static PyObject *__pyx_n_s_enter;
@@ -764,9 +770,9 @@ static PyObject *__pyx_codeobj__4;
 static PyObject *__pyx_codeobj__6;
 static PyObject *__pyx_codeobj__8;
 
-/* "indexer.pyx":10
- *     cdef FILE* source_file
+/* "indexer.pyx":11
  *     cdef FILE* index_file
+ *     cdef int counter
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
  *         self.source_file = fopen(source_file_name, "r")
  *         self.index_file = fopen(index_file_name, "r")
@@ -803,11 +809,11 @@ static int __pyx_pw_7indexer_11IndexedFile_1__init__(PyObject *__pyx_v_self, PyO
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_index_file_name)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -820,7 +826,7 @@ static int __pyx_pw_7indexer_11IndexedFile_1__init__(PyObject *__pyx_v_self, PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("indexer.IndexedFile.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -842,29 +848,38 @@ static int __pyx_pf_7indexer_11IndexedFile___init__(struct __pyx_obj_7indexer_In
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "indexer.pyx":11
- *     cdef FILE* index_file
+  /* "indexer.pyx":12
+ *     cdef int counter
  *     def __init__(self, source_file_name, index_file_name):
  *         self.source_file = fopen(source_file_name, "r")             # <<<<<<<<<<<<<<
  *         self.index_file = fopen(index_file_name, "r")
- * 
+ *         self.counter = 0;
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_source_file_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_source_file_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->source_file = fopen(__pyx_t_1, __pyx_k_r);
 
-  /* "indexer.pyx":12
+  /* "indexer.pyx":13
  *     def __init__(self, source_file_name, index_file_name):
  *         self.source_file = fopen(source_file_name, "r")
  *         self.index_file = fopen(index_file_name, "r")             # <<<<<<<<<<<<<<
+ *         self.counter = 0;
  * 
- *     def read(self, line_number):
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_index_file_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_index_file_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 13; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->index_file = fopen(__pyx_t_1, __pyx_k_r);
 
-  /* "indexer.pyx":10
- *     cdef FILE* source_file
+  /* "indexer.pyx":14
+ *         self.source_file = fopen(source_file_name, "r")
+ *         self.index_file = fopen(index_file_name, "r")
+ *         self.counter = 0;             # <<<<<<<<<<<<<<
+ * 
+ *     def __iter__(self):
+ */
+  __pyx_v_self->counter = 0;
+
+  /* "indexer.pyx":11
  *     cdef FILE* index_file
+ *     cdef int counter
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
  *         self.source_file = fopen(source_file_name, "r")
  *         self.index_file = fopen(index_file_name, "r")
@@ -881,8 +896,169 @@ static int __pyx_pf_7indexer_11IndexedFile___init__(struct __pyx_obj_7indexer_In
   return __pyx_r;
 }
 
-/* "indexer.pyx":14
- *         self.index_file = fopen(index_file_name, "r")
+/* "indexer.pyx":16
+ *         self.counter = 0;
+ * 
+ *     def __iter__(self):             # <<<<<<<<<<<<<<
+ *       return  self
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7indexer_11IndexedFile_3__iter__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7indexer_11IndexedFile_3__iter__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__iter__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_7indexer_11IndexedFile_2__iter__(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7indexer_11IndexedFile_2__iter__(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__iter__", 0);
+
+  /* "indexer.pyx":17
+ * 
+ *     def __iter__(self):
+ *       return  self             # <<<<<<<<<<<<<<
+ * 
+ *     def __next__(self):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "indexer.pyx":16
+ *         self.counter = 0;
+ * 
+ *     def __iter__(self):             # <<<<<<<<<<<<<<
+ *       return  self
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "indexer.pyx":19
+ *       return  self
+ * 
+ *     def __next__(self):             # <<<<<<<<<<<<<<
+ *       r = read_from_index(self.source_file, self.index_file, self.counter)
+ *       if r :
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7indexer_11IndexedFile_5__next__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7indexer_11IndexedFile_5__next__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__next__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_7indexer_11IndexedFile_4__next__(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7indexer_11IndexedFile_4__next__(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self) {
+  char *__pyx_v_r;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__next__", 0);
+
+  /* "indexer.pyx":20
+ * 
+ *     def __next__(self):
+ *       r = read_from_index(self.source_file, self.index_file, self.counter)             # <<<<<<<<<<<<<<
+ *       if r :
+ *         self.counter += 1
+ */
+  __pyx_v_r = read_from_index(__pyx_v_self->source_file, __pyx_v_self->index_file, __pyx_v_self->counter);
+
+  /* "indexer.pyx":21
+ *     def __next__(self):
+ *       r = read_from_index(self.source_file, self.index_file, self.counter)
+ *       if r :             # <<<<<<<<<<<<<<
+ *         self.counter += 1
+ *         return r
+ */
+  __pyx_t_1 = (__pyx_v_r != 0);
+  if (__pyx_t_1) {
+
+    /* "indexer.pyx":22
+ *       r = read_from_index(self.source_file, self.index_file, self.counter)
+ *       if r :
+ *         self.counter += 1             # <<<<<<<<<<<<<<
+ *         return r
+ * 
+ */
+    __pyx_v_self->counter = (__pyx_v_self->counter + 1);
+
+    /* "indexer.pyx":23
+ *       if r :
+ *         self.counter += 1
+ *         return r             # <<<<<<<<<<<<<<
+ * 
+ *       else:
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyBytes_FromString(__pyx_v_r); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_r = __pyx_t_2;
+    __pyx_t_2 = 0;
+    goto __pyx_L0;
+  }
+  /*else*/ {
+
+    /* "indexer.pyx":26
+ * 
+ *       else:
+ *         return StopIteration             # <<<<<<<<<<<<<<
+ * 
+ *     def read(self, line_number):
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(__pyx_builtin_StopIteration);
+    __pyx_r = __pyx_builtin_StopIteration;
+    goto __pyx_L0;
+  }
+
+  /* "indexer.pyx":19
+ *       return  self
+ * 
+ *     def __next__(self):             # <<<<<<<<<<<<<<
+ *       r = read_from_index(self.source_file, self.index_file, self.counter)
+ *       if r :
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("indexer.IndexedFile.__next__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "indexer.pyx":28
+ *         return StopIteration
  * 
  *     def read(self, line_number):             # <<<<<<<<<<<<<<
  *         return read_from_index(self.source_file, self.index_file, line_number)
@@ -890,19 +1066,19 @@ static int __pyx_pf_7indexer_11IndexedFile___init__(struct __pyx_obj_7indexer_In
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7indexer_11IndexedFile_3read(PyObject *__pyx_v_self, PyObject *__pyx_v_line_number); /*proto*/
-static PyObject *__pyx_pw_7indexer_11IndexedFile_3read(PyObject *__pyx_v_self, PyObject *__pyx_v_line_number) {
+static PyObject *__pyx_pw_7indexer_11IndexedFile_7read(PyObject *__pyx_v_self, PyObject *__pyx_v_line_number); /*proto*/
+static PyObject *__pyx_pw_7indexer_11IndexedFile_7read(PyObject *__pyx_v_self, PyObject *__pyx_v_line_number) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("read (wrapper)", 0);
-  __pyx_r = __pyx_pf_7indexer_11IndexedFile_2read(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self), ((PyObject *)__pyx_v_line_number));
+  __pyx_r = __pyx_pf_7indexer_11IndexedFile_6read(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self), ((PyObject *)__pyx_v_line_number));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self, PyObject *__pyx_v_line_number) {
+static PyObject *__pyx_pf_7indexer_11IndexedFile_6read(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self, PyObject *__pyx_v_line_number) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   long __pyx_t_1;
@@ -912,7 +1088,7 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("read", 0);
 
-  /* "indexer.pyx":15
+  /* "indexer.pyx":29
  * 
  *     def read(self, line_number):
  *         return read_from_index(self.source_file, self.index_file, line_number)             # <<<<<<<<<<<<<<
@@ -920,15 +1096,15 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer
  *     def close(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_long(__pyx_v_line_number); if (unlikely((__pyx_t_1 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_2 = __Pyx_PyBytes_FromString(read_from_index(__pyx_v_self->source_file, __pyx_v_self->index_file, __pyx_t_1)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_As_long(__pyx_v_line_number); if (unlikely((__pyx_t_1 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyBytes_FromString(read_from_index(__pyx_v_self->source_file, __pyx_v_self->index_file, __pyx_t_1)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "indexer.pyx":14
- *         self.index_file = fopen(index_file_name, "r")
+  /* "indexer.pyx":28
+ *         return StopIteration
  * 
  *     def read(self, line_number):             # <<<<<<<<<<<<<<
  *         return read_from_index(self.source_file, self.index_file, line_number)
@@ -946,7 +1122,7 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer
   return __pyx_r;
 }
 
-/* "indexer.pyx":17
+/* "indexer.pyx":31
  *         return read_from_index(self.source_file, self.index_file, line_number)
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -955,24 +1131,24 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_2read(struct __pyx_obj_7indexer
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7indexer_11IndexedFile_5close(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7indexer_11IndexedFile_5close(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7indexer_11IndexedFile_9close(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7indexer_11IndexedFile_9close(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("close (wrapper)", 0);
-  __pyx_r = __pyx_pf_7indexer_11IndexedFile_4close(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7indexer_11IndexedFile_8close(((struct __pyx_obj_7indexer_IndexedFile *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7indexer_11IndexedFile_4close(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self) {
+static PyObject *__pyx_pf_7indexer_11IndexedFile_8close(struct __pyx_obj_7indexer_IndexedFile *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("close", 0);
 
-  /* "indexer.pyx":18
+  /* "indexer.pyx":32
  * 
  *     def close(self):
  *         fclose(self.source_file)             # <<<<<<<<<<<<<<
@@ -981,7 +1157,7 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_4close(struct __pyx_obj_7indexe
  */
   fclose(__pyx_v_self->source_file);
 
-  /* "indexer.pyx":19
+  /* "indexer.pyx":33
  *     def close(self):
  *         fclose(self.source_file)
  *         fclose(self.index_file)             # <<<<<<<<<<<<<<
@@ -990,7 +1166,7 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_4close(struct __pyx_obj_7indexe
  */
   fclose(__pyx_v_self->index_file);
 
-  /* "indexer.pyx":17
+  /* "indexer.pyx":31
  *         return read_from_index(self.source_file, self.index_file, line_number)
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -1005,7 +1181,7 @@ static PyObject *__pyx_pf_7indexer_11IndexedFile_4close(struct __pyx_obj_7indexe
   return __pyx_r;
 }
 
-/* "indexer.pyx":23
+/* "indexer.pyx":37
  * class Indexer(object):
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
@@ -1047,16 +1223,16 @@ static PyObject *__pyx_pw_7indexer_7Indexer_1__init__(PyObject *__pyx_self, PyOb
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_source_file_name)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_index_file_name)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1071,7 +1247,7 @@ static PyObject *__pyx_pw_7indexer_7Indexer_1__init__(PyObject *__pyx_self, PyOb
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("indexer.Indexer.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1092,25 +1268,25 @@ static PyObject *__pyx_pf_7indexer_7Indexer___init__(CYTHON_UNUSED PyObject *__p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "indexer.pyx":24
+  /* "indexer.pyx":38
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):
  *         self.source_file_name = source_file_name             # <<<<<<<<<<<<<<
  *         self.index_file_name = index_file_name
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name, __pyx_v_source_file_name) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name, __pyx_v_source_file_name) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "indexer.pyx":25
+  /* "indexer.pyx":39
  *     def __init__(self, source_file_name, index_file_name):
  *         self.source_file_name = source_file_name
  *         self.index_file_name = index_file_name             # <<<<<<<<<<<<<<
  * 
  *     def make_index(self):
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name, __pyx_v_index_file_name) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name, __pyx_v_index_file_name) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "indexer.pyx":23
+  /* "indexer.pyx":37
  * class Indexer(object):
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
@@ -1130,7 +1306,7 @@ static PyObject *__pyx_pf_7indexer_7Indexer___init__(CYTHON_UNUSED PyObject *__p
   return __pyx_r;
 }
 
-/* "indexer.pyx":27
+/* "indexer.pyx":41
  *         self.index_file_name = index_file_name
  * 
  *     def make_index(self):             # <<<<<<<<<<<<<<
@@ -1164,24 +1340,24 @@ static PyObject *__pyx_pf_7indexer_7Indexer_2make_index(CYTHON_UNUSED PyObject *
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("make_index", 0);
 
-  /* "indexer.pyx":28
+  /* "indexer.pyx":42
  * 
  *     def make_index(self):
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)             # <<<<<<<<<<<<<<
  * 
  *     def __enter__(self):
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_AsString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_AsString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   make_index_from_file(__pyx_t_2, __pyx_t_4, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "indexer.pyx":27
+  /* "indexer.pyx":41
  *         self.index_file_name = index_file_name
  * 
  *     def make_index(self):             # <<<<<<<<<<<<<<
@@ -1203,7 +1379,7 @@ static PyObject *__pyx_pf_7indexer_7Indexer_2make_index(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "indexer.pyx":30
+/* "indexer.pyx":44
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -1236,18 +1412,18 @@ static PyObject *__pyx_pf_7indexer_7Indexer_4__enter__(CYTHON_UNUSED PyObject *_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__enter__", 0);
 
-  /* "indexer.pyx":31
+  /* "indexer.pyx":45
  * 
  *     def __enter__(self):
  *         self.if_object = IndexedFile(self.source_file_name, self.index_file_name)             # <<<<<<<<<<<<<<
  *         return self.if_object
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_source_file_name); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_index_file_name); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -1255,13 +1431,13 @@ static PyObject *__pyx_pf_7indexer_7Indexer_4__enter__(CYTHON_UNUSED PyObject *_
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_7indexer_IndexedFile)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_7indexer_IndexedFile)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_if_object, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_if_object, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "indexer.pyx":32
+  /* "indexer.pyx":46
  *     def __enter__(self):
  *         self.if_object = IndexedFile(self.source_file_name, self.index_file_name)
  *         return self.if_object             # <<<<<<<<<<<<<<
@@ -1269,13 +1445,13 @@ static PyObject *__pyx_pf_7indexer_7Indexer_4__enter__(CYTHON_UNUSED PyObject *_
  *     def __exit__(self, type, value, traceback):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_if_object); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_if_object); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "indexer.pyx":30
+  /* "indexer.pyx":44
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -1296,7 +1472,7 @@ static PyObject *__pyx_pf_7indexer_7Indexer_4__enter__(CYTHON_UNUSED PyObject *_
   return __pyx_r;
 }
 
-/* "indexer.pyx":34
+/* "indexer.pyx":48
  *         return self.if_object
  * 
  *     def __exit__(self, type, value, traceback):             # <<<<<<<<<<<<<<
@@ -1339,21 +1515,21 @@ static PyObject *__pyx_pw_7indexer_7Indexer_7__exit__(PyObject *__pyx_self, PyOb
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_type)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_value)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_traceback)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -1370,7 +1546,7 @@ static PyObject *__pyx_pw_7indexer_7Indexer_7__exit__(PyObject *__pyx_self, PyOb
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("indexer.Indexer.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1394,14 +1570,14 @@ static PyObject *__pyx_pf_7indexer_7Indexer_6__exit__(CYTHON_UNUSED PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__exit__", 0);
 
-  /* "indexer.pyx":35
+  /* "indexer.pyx":49
  * 
  *     def __exit__(self, type, value, traceback):
  *         self.if_object.close()             # <<<<<<<<<<<<<<
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_if_object); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_if_object); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_close); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_close); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -1415,16 +1591,16 @@ static PyObject *__pyx_pf_7indexer_7Indexer_6__exit__(CYTHON_UNUSED PyObject *__
     }
   }
   if (__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "indexer.pyx":34
+  /* "indexer.pyx":48
  *         return self.if_object
  * 
  *     def __exit__(self, type, value, traceback):             # <<<<<<<<<<<<<<
@@ -1467,8 +1643,9 @@ static void __pyx_tp_dealloc_7indexer_IndexedFile(PyObject *o) {
 }
 
 static PyMethodDef __pyx_methods_7indexer_IndexedFile[] = {
-  {"read", (PyCFunction)__pyx_pw_7indexer_11IndexedFile_3read, METH_O, 0},
-  {"close", (PyCFunction)__pyx_pw_7indexer_11IndexedFile_5close, METH_NOARGS, 0},
+  {"__next__", (PyCFunction)__pyx_pw_7indexer_11IndexedFile_5__next__, METH_NOARGS|METH_COEXIST, 0},
+  {"read", (PyCFunction)__pyx_pw_7indexer_11IndexedFile_7read, METH_O, 0},
+  {"close", (PyCFunction)__pyx_pw_7indexer_11IndexedFile_9close, METH_NOARGS, 0},
   {0, 0, 0, 0}
 };
 
@@ -1502,8 +1679,8 @@ static PyTypeObject __pyx_type_7indexer_IndexedFile = {
   0, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
-  0, /*tp_iter*/
-  0, /*tp_iternext*/
+  __pyx_pw_7indexer_11IndexedFile_3__iter__, /*tp_iter*/
+  __pyx_pw_7indexer_11IndexedFile_5__next__, /*tp_iternext*/
   __pyx_methods_7indexer_IndexedFile, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
@@ -1558,6 +1735,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Indexer___init, __pyx_k_Indexer___init, sizeof(__pyx_k_Indexer___init), 0, 0, 1, 1},
   {&__pyx_n_s_Indexer_make_index, __pyx_k_Indexer_make_index, sizeof(__pyx_k_Indexer_make_index), 0, 0, 1, 1},
   {&__pyx_kp_s_Loads_up_indexer, __pyx_k_Loads_up_indexer, sizeof(__pyx_k_Loads_up_indexer), 0, 0, 1, 0},
+  {&__pyx_n_s_StopIteration, __pyx_k_StopIteration, sizeof(__pyx_k_StopIteration), 0, 0, 1, 1},
   {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
   {&__pyx_n_s_enter, __pyx_k_enter, sizeof(__pyx_k_enter), 0, 0, 1, 1},
@@ -1583,7 +1761,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_object = __Pyx_GetBuiltinName(__pyx_n_s_object); if (!__pyx_builtin_object) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_object = __Pyx_GetBuiltinName(__pyx_n_s_object); if (!__pyx_builtin_object) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_StopIteration = __Pyx_GetBuiltinName(__pyx_n_s_StopIteration); if (!__pyx_builtin_StopIteration) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -1593,52 +1772,52 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "indexer.pyx":23
+  /* "indexer.pyx":37
  * class Indexer(object):
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
  *         self.source_file_name = source_file_name
  *         self.index_file_name = index_file_name
  */
-  __pyx_tuple_ = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_source_file_name, __pyx_n_s_index_file_name); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_source_file_name, __pyx_n_s_index_file_name); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_init, 23, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_init, 37, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "indexer.pyx":27
+  /* "indexer.pyx":41
  *         self.index_file_name = index_file_name
  * 
  *     def make_index(self):             # <<<<<<<<<<<<<<
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_make_index, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_make_index, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "indexer.pyx":30
+  /* "indexer.pyx":44
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
  *         self.if_object = IndexedFile(self.source_file_name, self.index_file_name)
  *         return self.if_object
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_enter, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_enter, 44, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "indexer.pyx":34
+  /* "indexer.pyx":48
  *         return self.if_object
  * 
  *     def __exit__(self, type, value, traceback):             # <<<<<<<<<<<<<<
  *         self.if_object.close()
  */
-  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_type, __pyx_n_s_value, __pyx_n_s_traceback); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_type, __pyx_n_s_value, __pyx_n_s_traceback); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_exit, 34, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_storage_storage_work_research_i, __pyx_n_s_exit, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1745,80 +1924,80 @@ PyMODINIT_FUNC PyInit_indexer(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "indexer.pyx":21
+  /* "indexer.pyx":35
  *         fclose(self.index_file)
  * 
  * class Indexer(object):             # <<<<<<<<<<<<<<
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):
  */
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_builtin_object);
   __Pyx_GIVEREF(__pyx_builtin_object);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_builtin_object);
-  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_t_1, __pyx_n_s_Indexer, __pyx_n_s_Indexer, (PyObject *) NULL, __pyx_n_s_indexer, __pyx_kp_s_Loads_up_indexer); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_t_1, __pyx_n_s_Indexer, __pyx_n_s_Indexer, (PyObject *) NULL, __pyx_n_s_indexer, __pyx_kp_s_Loads_up_indexer); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
 
-  /* "indexer.pyx":23
+  /* "indexer.pyx":37
  * class Indexer(object):
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):             # <<<<<<<<<<<<<<
  *         self.source_file_name = source_file_name
  *         self.index_file_name = index_file_name
  */
-  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_1__init__, 0, __pyx_n_s_Indexer___init, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_1__init__, 0, __pyx_n_s_Indexer___init, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "indexer.pyx":27
+  /* "indexer.pyx":41
  *         self.index_file_name = index_file_name
  * 
  *     def make_index(self):             # <<<<<<<<<<<<<<
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  */
-  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_3make_index, 0, __pyx_n_s_Indexer_make_index, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__4)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_3make_index, 0, __pyx_n_s_Indexer_make_index, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__4)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_make_index, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_make_index, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "indexer.pyx":30
+  /* "indexer.pyx":44
  *         make_index_from_file(self.source_file_name, self.index_file_name, 0)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
  *         self.if_object = IndexedFile(self.source_file_name, self.index_file_name)
  *         return self.if_object
  */
-  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_5__enter__, 0, __pyx_n_s_Indexer___enter, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_5__enter__, 0, __pyx_n_s_Indexer___enter, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_enter, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_enter, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "indexer.pyx":34
+  /* "indexer.pyx":48
  *         return self.if_object
  * 
  *     def __exit__(self, type, value, traceback):             # <<<<<<<<<<<<<<
  *         self.if_object.close()
  */
-  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_7__exit__, 0, __pyx_n_s_Indexer___exit, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_7indexer_7Indexer_7__exit__, 0, __pyx_n_s_Indexer___exit, NULL, __pyx_n_s_indexer, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_exit, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_exit, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "indexer.pyx":21
+  /* "indexer.pyx":35
  *         fclose(self.index_file)
  * 
  * class Indexer(object):             # <<<<<<<<<<<<<<
  *     """Loads up indexer"""
  *     def __init__(self, source_file_name, index_file_name):
  */
-  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_Indexer, __pyx_t_1, __pyx_t_3, NULL, 0, 1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_Indexer, __pyx_t_1, __pyx_t_3, NULL, 0, 1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Indexer, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Indexer, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
