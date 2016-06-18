@@ -76,7 +76,7 @@ int make_index_from_file(char const *source_file, char const *target_file, int v
   return -200; /* A Custom error for informing that, your file does not exist*/
 
   while ((read = getline(&line, &len, fp)) != -1) {
-    printf("%d %zu %zu\n", line_number, total_size_read, total_size_read + read);
+    //    printf("%d %zu %zu\n", line_number, total_size_read, total_size_read + read);
     fwrite(&line_number, sizeof(line_number), 1, op);
     fwrite(&total_size_read, sizeof(total_size_read), 1, op);
     total_size_read += read;
