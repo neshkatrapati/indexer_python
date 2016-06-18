@@ -4,7 +4,7 @@ from Cython.Distutils import build_ext
 import os
 
 setup(
-    name="indexer",
+    name="indexer_python",
     version="0.1",
     author="Ganesh Katrapati",
     author_email="ganesh.katrapati@research.iiit.ac.in",

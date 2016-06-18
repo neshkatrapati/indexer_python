@@ -6,7 +6,10 @@ Given a large text file, indexer makes an index and stores it in binary. When a 
 Indexer Python is a Cython wrapper over neshkatrapati/indexer.
 
 ## How to ?
+Install Cython before this.
 > #### Install
     $ python setup.py install
+    (or)
+    $ pip install indexer_python
 
 See tests/ for examples
