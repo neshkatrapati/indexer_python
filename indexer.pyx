@@ -2,22 +2,22 @@ cimport indexer
 cimport libc.stdio
 
 
-
 cdef class IndexedFile(object):
     """A file which reads the source_file"""
     cdef FILE* source_file
     cdef FILE* index_file
     cdef int counter
     def __init__(self, source_file_name, index_file_name):
-        self.source_file = fopen(source_file_name, "r")
-        self.index_file = fopen(index_file_name, "r")
+        self.source_file = fopen(source_file_name, "rb")
+        self.index_file = fopen(index_file_name, "rb")
         self.counter = 0;
 
     def __iter__(self):
       return  self
 
     def __next__(self):
-      r = read_from_index(self.source_file, self.index_file, self.counter)
+      cdef Py_ssize_t length = 0
+      r = read_from_index(self.source_file, self.index_file, self.counter, &length)
       if r :
         self.counter += 1
         return r
@@ -25,8 +25,12 @@ cdef class IndexedFile(object):
       else:
         return StopIteration
 
+
     def read(self, line_number):
-        return read_from_index(self.source_file, self.index_file, line_number)
+        cdef Py_ssize_t length = 0
+        cdef char* c_string = read_from_index(self.source_file, self.index_file, line_number, &length)       
+        cdef bytes py_string = c_string
+        return py_string.strip()
 
     def close(self):
         fclose(self.source_file)

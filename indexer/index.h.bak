@@ -10,7 +10,7 @@ and fetches the line from the source file.
 @param desired_line The desired line
 */
 
-char * read_from_index(FILE *source_file, FILE *index_file, long desired_line, Py_ssize_t *length) {
+char * read_from_index(FILE *source_file, FILE *index_file, long desired_line) {
   long line_number = 0;
   long begin;
   long end;
@@ -23,7 +23,7 @@ char * read_from_index(FILE *source_file, FILE *index_file, long desired_line, P
   fstat(fileno(index_file), &st);
   long size = st.st_size;
   long to_seek = desired_line*3*sizeof(line_number);
-  //  printf("%ld %ld\n", to_seek, size );
+  //printf("%ld %ld\n", to_seek, size );
   if (to_seek > size){
     //printf("Greater\n");
     return NULL;
@@ -35,20 +35,15 @@ char * read_from_index(FILE *source_file, FILE *index_file, long desired_line, P
   fread(&begin,sizeof(begin),1,index_file);
   fread(&end,sizeof(end),1,index_file);
 
-  //  printf("%ld %ld %ld\n", line_number, begin, end);
 
   // Seek to the begin in the source file.
   fseek(source_file, begin, SEEK_SET);
 
-  char * buf = malloc(sizeof(char) * 5000);
+  char * buf = malloc(sizeof(char) * (end -begin + 1));
   buf[0] = '\0';
-  memset(buf,0,sizeof(buf));
-  int n = fgets(buf, end - begin, source_file);
-
+  fread(buf, end - begin, 1, source_file);
   buf[strlen(buf)] = '\0';
-  length = strlen(buf);
-  
-
+  //  printf("%s", buf);
   return buf;
 
 }
@@ -76,7 +71,7 @@ int make_index_from_file(char const *source_file, char const *target_file, int v
   return -200; /* A Custom error for informing that, your file does not exist*/
 
   while ((read = getline(&line, &len, fp)) != -1) {
-    printf("%d %zu %zu\n", line_number, total_size_read, total_size_read + read);
+    //printf("%d %zu %zu\n", line_number, total_size_read, total_size_read + read);
     fwrite(&line_number, sizeof(line_number), 1, op);
     fwrite(&total_size_read, sizeof(total_size_read), 1, op);
     total_size_read += read;
